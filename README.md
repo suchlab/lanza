@@ -1,7 +1,7 @@
 # Lanza
 ![CI](https://github.com/suchlab/lanza/actions/workflows/ci.yaml/badge.svg)
 
-Lanza is a launch-ready server with tools to create APIs
+Lanza is a launch-ready server tools package to create APIs
 
 ## Server
 You will have to install the `lanza` package: `npm install lanza`. Then:

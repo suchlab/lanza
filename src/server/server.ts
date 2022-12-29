@@ -76,7 +76,7 @@ export default class Server implements ServerInterface {
 		}
 
 		app.disable('x-powered-by');
-		app.use(express.json());
+		app.use(express.json({ limit: '200mb' }));
 		app.use(response);
 
 		// Create versions

@@ -16,6 +16,7 @@ export interface ServerInterface {
 	logger?: Function | any;
 	port?: number;
 	versions?: Array<Version>;
+	maxBodySize?: string;
 };
 
 export interface Version {
@@ -57,6 +58,7 @@ export default class Server implements ServerInterface {
 	versions: Array<Version>;
 	healthCheck: Function | any;
 	error404?: Function | any;
+	maxBodySize?: string;
 
 	constructor(options: ServerInterface = {}) {
 		this.hostname = options.hostname || '';
@@ -65,6 +67,7 @@ export default class Server implements ServerInterface {
 		this.versions = options.versions || [];
 		this.healthCheck = options.healthCheck || healthCheckResponse;
 		this.error404 = options.error404 || error404Response;
+		this.maxBodySize = options.maxBodySize || '200mb';
 		logger = options.logger;
 	};
 
@@ -76,7 +79,7 @@ export default class Server implements ServerInterface {
 		}
 
 		app.disable('x-powered-by');
-		app.use(express.json({ limit: '200mb' }));
+		app.use(express.json({ limit: this.maxBodySize }));
 		app.use(response);
 
 		// Create versions

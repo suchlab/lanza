@@ -11,7 +11,7 @@ export { default as Database } from './database/database.js';
 export { default as EventBus } from './event-bus/event-bus.js';
 
 // ID
-export { default as uuid } from './utils/uuid.js';
+export { default as uuid, default as UUID } from './utils/uuid.js';
 
 // DTO
 export { default as dto } from './utils/dto.js';

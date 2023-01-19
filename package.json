@@ -18,8 +18,8 @@
     "prepare": "npm run build",
     "test": "jest --config jestconfig.json"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "itaibo@hey.com",
+  "license": "MIT",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.12",

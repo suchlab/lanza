@@ -24,7 +24,6 @@ test('Server start', async () => {
 		port: 8008,
 		logger: mockLogger,
 		versions: [{
-			path: '/v1',
 			middlewares: [
 				{
 					handler: (_req: any, _res: any) => { return { name: 'Jane' } },
@@ -110,12 +109,12 @@ test('Check health endpoint', async () => {
 });
 
 test('Check basic request', async () => {
-	const request = await axios.get(`${ENDPOINT}/v1/basic`);
+	const request = await axios.get(`${ENDPOINT}/basic`);
 	expect(request.data.success).toBe(true);
 });
 
 test('Check default object response', async () => {
-	request = await axios.get(`${ENDPOINT}/v1/default-response`);
+	request = await axios.get(`${ENDPOINT}/default-response`);
 	expect(request.data.success).toBe(true);
 });
 
@@ -125,50 +124,50 @@ test('Check DTO from default object response', async () => {
 });
 
 test('Check plain text response', async () => {
-	request = await axios.get(`${ENDPOINT}/v1/plain-text`);
+	request = await axios.get(`${ENDPOINT}/plain-text`);
 	expect(request.data).toBe('ok');
 });
 
 test('Check boolean response', async () => {
-	request = await axios.get(`${ENDPOINT}/v1/boolean`);
+	request = await axios.get(`${ENDPOINT}/boolean`);
 	expect(request.data.success).toBe(true);
 });
 
 test('Custom middleware', async () => {
-	request = await axios.get(`${ENDPOINT}/v1/middleware`);
+	request = await axios.get(`${ENDPOINT}/middleware`);
 	expect(request.data.name).toBe('Jane');
 });
 
 test('Custom logger', async () => {
 	try {
-		await axios.get(`${ENDPOINT}/v1/logger`);
+		await axios.get(`${ENDPOINT}/logger`);
 	} catch (e) {}
 	
 	expect(mockLogger).toBeCalledTimes(1);
 });
 
 test('Empty token', async () => {
-	request = await axios.get(`${ENDPOINT}/v1/token?token=`);
+	request = await axios.get(`${ENDPOINT}/token?token=`);
 	expect(request.data.token).toBe(null);
 });
 
 test('Token via query', async () => {
-	request = await axios.get(`${ENDPOINT}/v1/token?token=thisisatoken`);
+	request = await axios.get(`${ENDPOINT}/token?token=thisisatoken`);
 	expect(request.data.token).toBe('thisisatoken');
 });
 
 test('Token via header', async () => {
-	request = await axios.get(`${ENDPOINT}/v1/token`, { headers: { authorization: 'Bearer thisisatoken' }});
+	request = await axios.get(`${ENDPOINT}/token`, { headers: { authorization: 'Bearer thisisatoken' }});
 	expect(request.data.token).toBe('thisisatoken');
 });
 
 test('Token via query overrides header', async () => {
-	request = await axios.get(`${ENDPOINT}/v1/token?token=other`, { headers: { authorization: 'Bearer thisisatoken' }});
+	request = await axios.get(`${ENDPOINT}/token?token=other`, { headers: { authorization: 'Bearer thisisatoken' }});
 	expect(request.data.token).toBe('other');
 });
 
 test('Handler gets route configuration', async () => {
-	request = await axios.get(`${ENDPOINT}/v1/route`);
+	request = await axios.get(`${ENDPOINT}/route`);
 	expect(request.data.routeParam).toBe('HelloRouteParam');
 });
 

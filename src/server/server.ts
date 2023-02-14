@@ -21,7 +21,7 @@ export interface ServerInterface {
 
 export interface Version {
 	middlewares?: Array<Middleware>;
-	path: string;
+	path?: string;
 	routes: Array<Route>;
 };
 
@@ -118,7 +118,7 @@ export default class Server implements ServerInterface {
 
 	private createVersion(version: Version) {
 		const router = express.Router();
-		const routerPath = version.path || '/v1';
+		const routerPath = version.path || '';
 		app.use(routerPath, router);
 
 		const middlewares = version.middlewares;

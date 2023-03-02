@@ -1,6 +1,7 @@
 import express, { Express, Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import http from 'http';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 
 import asyncHandler from './helpers/async-handler.js';
 import errorHandler from './helpers/error-handler.js';
@@ -41,6 +42,7 @@ export interface Route {
 
 export interface Request extends ExpressRequest {
 	lanza?: any;
+	rawBody?: Buffer;
 };
 
 export interface Response extends ExpressResponse {
@@ -80,6 +82,12 @@ export default class Server implements ServerInterface {
 
 		app.disable('x-powered-by');
 		app.use(express.json({ limit: this.maxBodySize }));
+		app.use(bodyParser.json({
+			limit: this.maxBodySize,
+			verify: (req: Request, _res, buf) => {
+				req.rawBody = buf;
+			},
+		}));
 		app.use(response);
 
 		// Create versions

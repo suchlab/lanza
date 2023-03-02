@@ -81,7 +81,6 @@ export default class Server implements ServerInterface {
 		}
 
 		app.disable('x-powered-by');
-		app.use(express.json({ limit: this.maxBodySize }));
 		app.use(bodyParser.json({
 			limit: this.maxBodySize,
 			verify: (req: Request, _res, buf) => {

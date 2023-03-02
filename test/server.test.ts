@@ -10,7 +10,7 @@ const ENDPOINT = 'http://localhost:8008';
 
 const mockLogger = jest.fn();
 
-console.log = console.error = () => {};
+//console.log = console.error = () => {};
 
 test('Server configuration', () => {
 	const server = new Server({ port: 1000 });
@@ -94,6 +94,13 @@ test('Server start', async () => {
 					handler: (req: any, res: any) => {
 						res.response(200, { routeParam: req?.routeParam });
 					}
+				},
+				{
+					path: '/raw-body',
+					method: 'post',
+					handler: (req: any, res: any) => {
+						res.response(200, { raw: req?.rawBody });
+					}
 				}
 			]
 		}]
@@ -169,6 +176,11 @@ test('Token via query overrides header', async () => {
 test('Handler gets route configuration', async () => {
 	request = await axios.get(`${ENDPOINT}/route`);
 	expect(request.data.routeParam).toBe('HelloRouteParam');
+});
+
+test('Raw body', async () => {
+	request = await axios.post(`${ENDPOINT}/raw-body`, { data: 'hello' });
+	expect(Buffer.from(request.data.raw).toString()).toBe('{\"data\":\"hello\"}');
 });
 
 test('Server stop', async () => {

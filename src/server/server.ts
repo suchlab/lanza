@@ -18,6 +18,7 @@ export interface ServerInterface {
 	port?: number;
 	versions?: Array<Version>;
 	maxBodySize?: string;
+	rawBody?: boolean;
 };
 
 export interface Version {
@@ -61,15 +62,18 @@ export default class Server implements ServerInterface {
 	healthCheck: Function | any;
 	error404?: Function | any;
 	maxBodySize?: string;
+	rawBody?: boolean;
 
 	constructor(options: ServerInterface = {}) {
 		this.hostname = options.hostname || '';
 		this.port = options.port || 8000;
-		this.cors = options.cors || true;
+		this.cors = options.cors !== undefined ? !!options.cors : true;
 		this.versions = options.versions || [];
 		this.healthCheck = options.healthCheck || healthCheckResponse;
 		this.error404 = options.error404 || error404Response;
 		this.maxBodySize = options.maxBodySize || '200mb';
+		this.rawBody = options.rawBody !== undefined ? !!options.rawBody : false;
+
 		logger = options.logger;
 	};
 
@@ -80,13 +84,22 @@ export default class Server implements ServerInterface {
 			app.use(cors());
 		}
 
+		// Remove headers
 		app.disable('x-powered-by');
-		app.use(bodyParser.json({
-			limit: this.maxBodySize,
-			verify: (req: Request, _res, buf) => {
-				req.rawBody = buf;
-			},
-		}));
+
+		// Handle body
+		if (this.rawBody) {
+			app.use(bodyParser.json({
+				limit: this.maxBodySize,
+				verify: (req: Request, _res, buf) => {
+					req.rawBody = buf;
+				},
+			}));
+		} else {
+			app.use(express.json({ limit: this.maxBodySize }));
+		}
+
+		// Use custom response
 		app.use(response);
 
 		// Create versions

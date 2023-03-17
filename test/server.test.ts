@@ -10,7 +10,7 @@ const ENDPOINT = 'http://localhost:8008';
 
 const mockLogger = jest.fn();
 
-//console.log = console.error = () => {};
+console.log = console.error = () => {};
 
 test('Server configuration', () => {
 	const server = new Server({ port: 1000 });
@@ -23,6 +23,7 @@ test('Server start', async () => {
 	server = new Server({
 		port: 8008,
 		logger: mockLogger,
+		rawBody: true,
 		versions: [{
 			middlewares: [
 				{

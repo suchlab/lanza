@@ -110,7 +110,7 @@ const server = new Server({
         {
           method: 'get',
           path: '/test',
-		  executeMiddleware: true,
+          executeMiddleware: true,
           handler: (req) => {
             console.log(req.middlewareExecuted);
             return true;

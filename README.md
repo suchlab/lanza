@@ -50,7 +50,7 @@ You can use various API versions in Lanza. You have to pass the array of version
 | routes | Array of routes. Check below for more details |
 | middlewares | Array of conditional middlewares for the routes. Check below for more details |
 
-## Paths
+## Routes
 | Option | Description |
 |---|---|
 | path | Path of the resource without the version path (e.g. `/users`) |
@@ -78,11 +78,11 @@ You can directly return booleans, text, and objects and Lanza will handle the re
 | JSON | Will return the JSON with its content type |
 
 ## Errors
-If an error occurs, Lanza will return the error in a specific format:
+If an error occurs and it is thrown, Lanza will return the error in a specific format:
 ```json
 {
   "error": {
-    "message": "Custom error"
+    "message": "Custom error message"
   }
 }
 ```

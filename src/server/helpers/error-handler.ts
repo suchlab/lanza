@@ -6,5 +6,5 @@ export default function errorHandler(err: any, req: Request, res: Response, next
 	if (!err.status) err.status = 500;
 	if (!err.message) err.message = 'Unknown error';
 
-	return res.response(err.status, err.message);
+	return res.response(err.status, err);
 };

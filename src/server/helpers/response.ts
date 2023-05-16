@@ -34,7 +34,7 @@ export default function (req: Request, res: Response, next: Function) {
 		if (code !== 200 && !data) {
 			resParams.error = { message: error.message, details };
 			console.error('Error: ', `${code} ${req.method} ${req.originalUrl} ${error.message}`);
-			if (code >= 500) console.error(error);
+			if (code >= 500) console.error(error.stack);
 
 			// Custom logger
 			Server.logger(code, req.method, req.originalUrl, error);

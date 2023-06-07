@@ -10,7 +10,6 @@ export default function (req: Request, res: Response, next: Function) {
 
 		req.on('end', function() {
 			if (body) {
-				console.log(body);
 				try {
 					JSON.parse(body);
 				} catch {

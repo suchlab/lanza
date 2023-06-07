@@ -40,6 +40,7 @@ npm install lanza
 | maxBodySize | `200mb` | Max body size the API can receive |
 | rawBody | `false` | Option to store the unparsed request in `req.rawBody`  |
 | logger | `null` | Custom logger to log errors |
+| appMiddlewares | `null` | Express' application-level middlewares |
 
 ## Versions
 You can use various API versions in Lanza. You have to pass the array of versions to the `versions` option of the server.

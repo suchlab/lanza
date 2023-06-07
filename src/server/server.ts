@@ -1,4 +1,5 @@
 import express, { Express, Request as ExpressRequest, Response as ExpressResponse } from 'express';
+
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -7,6 +8,7 @@ import asyncHandler from './helpers/async-handler.js';
 import errorHandler from './helpers/error-handler.js';
 import response from './helpers/response.js';
 import getToken from './helpers/get-token.js';
+import jsonValidator from './helpers/json-validator.js';
 import { error404Response, healthCheckResponse } from './helpers/basic-responses.js';
 
 export interface ServerInterface {
@@ -19,6 +21,7 @@ export interface ServerInterface {
 	versions?: Array<Version>;
 	maxBodySize?: string;
 	rawBody?: boolean;
+	appMiddlewares?: any[];
 };
 
 export interface Version {
@@ -63,6 +66,7 @@ export default class Server implements ServerInterface {
 	error404?: Function | any;
 	maxBodySize?: string;
 	rawBody?: boolean;
+	appMiddlewares?: any;
 
 	constructor(options: ServerInterface = {}) {
 		this.hostname = options.hostname || '';
@@ -73,6 +77,7 @@ export default class Server implements ServerInterface {
 		this.error404 = options.error404 || error404Response;
 		this.maxBodySize = options.maxBodySize || '200mb';
 		this.rawBody = options.rawBody !== undefined ? !!options.rawBody : false;
+		this.appMiddlewares = options.appMiddlewares;
 
 		logger = options.logger;
 	};
@@ -80,14 +85,24 @@ export default class Server implements ServerInterface {
 	async start() {
 		app = express();
 
+		// Configure CORS
 		if (this.cors) {
 			app.use(cors());
+		}
+
+		// Add custom appMiddlewares
+		if (this.appMiddlewares) {
+			for (const appMiddleware of this.appMiddlewares) {
+				app.use(appMiddleware);
+			}
 		}
 
 		// Remove headers
 		app.disable('x-powered-by');
 
 		// Handle body
+		app.use(jsonValidator);
+
 		if (this.rawBody) {
 			app.use(bodyParser.json({
 				limit: this.maxBodySize,
